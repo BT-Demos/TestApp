@@ -10,48 +10,48 @@ on:
 jobs:
   pre-prod:
     steps:
-      - name: Deploy CBP App to Preprod
+      - name: Deploy TestApp-Frontend to Preprod
         kind: deploy
-        if: ${{ fromJSON(inputs.manifest)['CBP-Component1']['CBP App'].deploy }}
+        if: ${{ fromJSON(inputs.manifest)['TestApp-Frontend']['TestApp-Frontend'].deploy }}
         uses: cloudbees-io/register-deployed-artifact@v1
         with:
-          version: ${{ fromJSON(inputs.manifest)['CBP-Component1']['CBP App'].version }}
-          url: ${{ fromJSON(inputs.manifest)['CBP-Component1']['CBP App'].url }}
-          digest: ${{ fromJSON(inputs.manifest)['CBP-Component1']['CBP App'].digest }}
+          version: ${{ fromJSON(inputs.manifest)['TestApp-Frontend']['TestApp-Frontend'].version }}
+          url: ${{ fromJSON(inputs.manifest)['TestApp-Frontend']['TestApp-Frontend'].url }}
+          digest: ${{ fromJSON(inputs.manifest)['TestApp-Frontend']['TestApp-Frontend'].digest }}
           target-environment: pre-prod
-          name: CBP App
+          name: TestApp-Frontend
 
-      - name: Deploy GHA App to Preprod
+      - name: Deploy TestApp-Backend to Preprod
         kind: deploy
-        if: ${{ fromJSON(inputs.manifest)['GHA-Component2']['GHA App'].deploy }}
+        if: ${{ fromJSON(inputs.manifest)['TestApp-Backend']['TestApp-Backend'].deploy }}
         uses: cloudbees-io/register-deployed-artifact@v1
         with:
-          version: ${{ fromJSON(inputs.manifest)['GHA-Component2']['GHA App'].version }}
-          url: ${{ fromJSON(inputs.manifest)['GHA-Component2']['GHA App'].url }}
-          digest: ${{ fromJSON(inputs.manifest)['GHA-Component2']['GHA App'].digest }}
+          version: ${{ fromJSON(inputs.manifest)['TestApp-Backend']['TestApp-Backend'].version }}
+          url: ${{ fromJSON(inputs.manifest)['TestApp-Backend']['TestApp-Backend'].url }}
+          digest: ${{ fromJSON(inputs.manifest)['TestApp-Backend']['TestApp-Backend'].digest }}
           target-environment: pre-prod
-          name: GHA App
+          name: TestApp-Backend
   prod:
     needs: pre-prod
     steps:
-      - name: Deploy CBP App to Preprod
+      - name: Deploy TestApp-Frontend to Prod
         kind: deploy
-        if: ${{ fromJSON(inputs.manifest)['CBP-Component1']['CBP App'].deploy }}
+        if: ${{ fromJSON(inputs.manifest)['TestApp-Frontend']['TestApp-Frontend'].deploy }}
         uses: cloudbees-io/register-deployed-artifact@v1
         with:
-          version: ${{ fromJSON(inputs.manifest)['CBP-Component1']['CBP App'].version }}
-          url: ${{ fromJSON(inputs.manifest)['CBP-Component1']['CBP App'].url }}
-          digest: ${{ fromJSON(inputs.manifest)['CBP-Component1']['CBP App'].digest }}
+          version: ${{ fromJSON(inputs.manifest)['TestApp-Frontend']['TestApp-Frontend'].version }}
+          url: ${{ fromJSON(inputs.manifest)['TestApp-Frontend']['TestApp-Frontend'].url }}
+          digest: ${{ fromJSON(inputs.manifest)['TestApp-Frontend']['TestApp-Frontend'].digest }}
           target-environment: prod
-          name: CBP App
+          name: TestApp-Frontend
 
-      - name: Deploy GHA App to Prod
+      - name: Deploy TestApp-Backend to Prod
         kind: deploy
-        if: ${{ fromJSON(inputs.manifest)['GHA-Component2']['GHA App'].deploy }}
+        if: ${{ fromJSON(inputs.manifest)['TestApp-Backend']['TestApp-Backend'].deploy }}
         uses: cloudbees-io/register-deployed-artifact@v1
         with:
-          version: ${{ fromJSON(inputs.manifest)['GHA-Component2']['GHA App'].version }}
-          url: ${{ fromJSON(inputs.manifest)['GHA-Component2']['GHA App'].url }}
-          digest: ${{ fromJSON(inputs.manifest)['GHA-Component2']['GHA App'].digest }}
+          version: ${{ fromJSON(inputs.manifest)['TestApp-Backend']['TestApp-Backend'].version }}
+          url: ${{ fromJSON(inputs.manifest)['TestApp-Backend']['TestApp-Backend'].url }}
+          digest: ${{ fromJSON(inputs.manifest)['TestApp-Backend']['TestApp-Backend'].digest }}
           target-environment: prod
-          name: GHA App
+          name: TestApp-Backend
