@@ -1,0 +1,57 @@
+apiVersion: automation.cloudbees.io/v1alpha1
+kind: workflow
+name: Application Release with manifest
+on:
+  workflow_dispatch:
+    inputs:
+      manifest:
+        type: string
+        required: true
+jobs:
+  pre-prod:
+    steps:
+      - name: Deploy CBP App to Preprod
+        kind: deploy
+        if: ${{ fromJSON(inputs.manifest)['CBP-Component1']['CBP App'].deploy }}
+        uses: cloudbees-io/register-deployed-artifact@v1
+        with:
+          version: ${{ fromJSON(inputs.manifest)['CBP-Component1']['CBP App'].version }}
+          url: ${{ fromJSON(inputs.manifest)['CBP-Component1']['CBP App'].url }}
+          digest: ${{ fromJSON(inputs.manifest)['CBP-Component1']['CBP App'].digest }}
+          target-environment: pre-prod
+          name: CBP App
+
+      - name: Deploy GHA App to Preprod
+        kind: deploy
+        if: ${{ fromJSON(inputs.manifest)['GHA-Component2']['GHA App'].deploy }}
+        uses: cloudbees-io/register-deployed-artifact@v1
+        with:
+          version: ${{ fromJSON(inputs.manifest)['GHA-Component2']['GHA App'].version }}
+          url: ${{ fromJSON(inputs.manifest)['GHA-Component2']['GHA App'].url }}
+          digest: ${{ fromJSON(inputs.manifest)['GHA-Component2']['GHA App'].digest }}
+          target-environment: pre-prod
+          name: GHA App
+  prod:
+    needs: pre-prod
+    steps:
+      - name: Deploy CBP App to Preprod
+        kind: deploy
+        if: ${{ fromJSON(inputs.manifest)['CBP-Component1']['CBP App'].deploy }}
+        uses: cloudbees-io/register-deployed-artifact@v1
+        with:
+          version: ${{ fromJSON(inputs.manifest)['CBP-Component1']['CBP App'].version }}
+          url: ${{ fromJSON(inputs.manifest)['CBP-Component1']['CBP App'].url }}
+          digest: ${{ fromJSON(inputs.manifest)['CBP-Component1']['CBP App'].digest }}
+          target-environment: prod
+          name: CBP App
+
+      - name: Deploy GHA App to Prod
+        kind: deploy
+        if: ${{ fromJSON(inputs.manifest)['GHA-Component2']['GHA App'].deploy }}
+        uses: cloudbees-io/register-deployed-artifact@v1
+        with:
+          version: ${{ fromJSON(inputs.manifest)['GHA-Component2']['GHA App'].version }}
+          url: ${{ fromJSON(inputs.manifest)['GHA-Component2']['GHA App'].url }}
+          digest: ${{ fromJSON(inputs.manifest)['GHA-Component2']['GHA App'].digest }}
+          target-environment: prod
+          name: GHA App

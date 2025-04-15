@@ -1,0 +1,27 @@
+apiVersion: automation.cloudbees.io/v1alpha1
+kind: workflow
+name: deployer
+'on':
+  workflow_dispatch:
+    inputs:
+      environment:
+        type: string
+        required: true
+  workflow_call:
+    inputs:
+      environment:
+        type: string
+        required: true
+jobs:
+  GHApp:
+    uses: BT-Demos/MyApp/.cloudbees/workflows/deploy-artifact.yaml
+    with:
+      artifactName: GHA App
+      artifactVersion: 1.0.0
+      environment: ${{ inputs.environment }}
+  CBPApp:
+    uses: BT-Demos/MyApp/.cloudbees/workflows/deploy-artifact.yaml
+    with:
+      artifactName: CBP App
+      artifactVersion: 1.0.0
+      environment: ${{ inputs.environment }}

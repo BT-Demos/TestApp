@@ -1,0 +1,18 @@
+apiVersion: automation.cloudbees.io/v1alpha1
+kind: workflow
+name: Application Release
+on:
+  workflow_dispatch:
+    inputs:
+      manifest:
+        type: string
+jobs:
+  pre-prod:
+    uses: BT-Demos/MyApp/.cloudbees/workflows/deployer.yaml
+    with:
+      environment: pre-prod
+  prod:
+    needs: pre-prod
+    uses: BT-Demos/MyApp/.cloudbees/workflows/deployer.yaml
+    with:
+      environment: prod
