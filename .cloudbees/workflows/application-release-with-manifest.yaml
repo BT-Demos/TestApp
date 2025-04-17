@@ -31,6 +31,17 @@ jobs:
           digest: ${{ fromJSON(inputs.manifest)['TestApp-Backend']['TestApp-Backend'].digest }}
           target-environment: pre-prod
           name: TestApp-Backend
+
+      - name: Deploy TestApp-APIs to Preprod
+        kind: deploy
+        if: ${{ fromJSON(inputs.manifest)['TestApp-APIs']['TestApp-APIs'].deploy }}
+        uses: cloudbees-io/register-deployed-artifact@v1
+        with:
+          version: ${{ fromJSON(inputs.manifest)['TestApp-APIs']['TestApp-APIs'].version }}
+          url: ${{ fromJSON(inputs.manifest)['TestApp-APIs']['TestApp-APIs'].url }}
+          digest: ${{ fromJSON(inputs.manifest)['TestApp-APIs']['TestApp-APIs'].digest }}
+          target-environment: pre-prod
+          name: TestApp-APIs
   prod:
     needs: pre-prod
     steps:
@@ -55,3 +66,14 @@ jobs:
           digest: ${{ fromJSON(inputs.manifest)['TestApp-Backend']['TestApp-Backend'].digest }}
           target-environment: prod
           name: TestApp-Backend
+
+      - name: Deploy TestApp-APIs to Prod
+        kind: deploy
+        if: ${{ fromJSON(inputs.manifest)['TestApp-APIs']['TestApp-APIs'].deploy }}
+        uses: cloudbees-io/register-deployed-artifact@v1
+        with:
+          version: ${{ fromJSON(inputs.manifest)['TestApp-APIs']['TestApp-APIs'].version }}
+          url: ${{ fromJSON(inputs.manifest)['TestApp-APIs']['TestApp-APIs'].url }}
+          digest: ${{ fromJSON(inputs.manifest)['TestApp-APIs']['TestApp-APIs'].digest }}
+          target-environment: prod
+          name: TestApp-APIs
